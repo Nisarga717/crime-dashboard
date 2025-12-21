@@ -176,33 +176,121 @@ export const generateMockUsers = (): User[] => {
 
 // Function to fetch crime reports from Supabase
 export const fetchCrimeReports = async (): Promise<CrimeReport[]> => {
-  // For now, return mock data
-  // In production, this would be replaced with a Supabase query
   try {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    const { supabase } = await import("@/integrations/supabase/client");
     
-    // Return mock data
-    return generateMockData();
+    // Query Supabase for crime reports
+    const { data, error } = await supabase
+      .from('crime_report')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Error fetching crime reports:", error);
+      toast.error("Failed to fetch crime reports");
+      // Fallback to mock data if Supabase query fails
+      return generateMockData();
+    }
+
+    if (!data || data.length === 0) {
+      // Return mock data if no data in database
+      return generateMockData();
+    }
+
+    // Transform Supabase data to match CrimeReport interface
+    return data.map((report: any) => {
+      // Extract coordinates from PostGIS geography
+      let coordinates: [number, number] = [72.8311, 21.1702]; // Default to Surat center
+      
+      if (report.location) {
+        // If location is a PostGIS geography, we need to extract coordinates
+        // Supabase returns it as a GeoJSON-like object or string
+        try {
+          if (typeof report.location === 'string') {
+            // Parse WKT or GeoJSON string
+            const match = report.location.match(/POINT\(([^)]+)\)/);
+            if (match) {
+              const [lng, lat] = match[1].split(' ').map(parseFloat);
+              coordinates = [lng, lat];
+            }
+          } else if (report.location.coordinates) {
+            coordinates = report.location.coordinates;
+          }
+        } catch (e) {
+          console.warn("Error parsing location:", e);
+        }
+      }
+
+      return {
+        id: report.id,
+        created_at: report.created_at,
+        location: {
+          type: "Point",
+          coordinates: coordinates
+        },
+        date: report.date || new Date(report.created_at).toISOString().split('T')[0],
+        time: report.time || "00:00:00",
+        perpetrator: report.perpetrator || "Unknown",
+        details: report.details || "",
+        user_id: report.user_id || 0,
+        report_type: report.report_type || "Citizen Report",
+        incident_type: report.incident_type || "Unknown",
+        status: (report.status as "New" | "Under Investigation" | "Resolved" | "False Report") || "New",
+        incident_severity: (report.incident_severity as "Low" | "Medium" | "High" | "Critical") || "Medium"
+      };
+    });
   } catch (error) {
     console.error("Error fetching crime reports:", error);
     toast.error("Failed to fetch crime reports");
-    return [];
+    // Fallback to mock data
+    return generateMockData();
   }
 };
 
 // Function to fetch users from Supabase
 export const fetchUsers = async (): Promise<User[]> => {
   try {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    const { supabase } = await import("@/integrations/supabase/client");
     
-    // Return mock data
-    return generateMockUsers();
+    // Query Supabase for users
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Error fetching users:", error);
+      toast.error("Failed to fetch users");
+      // Fallback to mock data if Supabase query fails
+      return generateMockUsers();
+    }
+
+    if (!data || data.length === 0) {
+      // Return mock data if no data in database
+      return generateMockUsers();
+    }
+
+    // Transform Supabase data to match User interface
+    return data.map((user: any) => ({
+      id: user.id,
+      created_at: user.created_at,
+      first_name: user.first_name || "",
+      last_name: user.last_name || "",
+      address: user.address || "",
+      pincode: user.pincode || 395007,
+      state: user.state || "Gujarat",
+      city: user.city || "Surat",
+      email: user.email || "",
+      phone_number: user.phone_number || "",
+      points: user.points || 0,
+      level: user.level || 1,
+      language: user.language || "Gujarati"
+    }));
   } catch (error) {
     console.error("Error fetching users:", error);
     toast.error("Failed to fetch users");
-    return [];
+    // Fallback to mock data
+    return generateMockUsers();
   }
 };
 
