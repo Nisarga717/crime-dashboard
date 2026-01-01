@@ -66,8 +66,8 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ incidentTypes, statuses }
           Dashboard Filters
         </CardTitle>
       </CardHeader>
-      <CardContent className="py-2">
-        <div className="flex flex-wrap gap-2">
+      <CardContent className="py-3">
+        <div className="flex flex-wrap gap-2 items-center">
           {/* Date Range Filter */}
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>

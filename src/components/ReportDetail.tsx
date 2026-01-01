@@ -132,7 +132,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({
             </DrawerClose>
           </DrawerHeader>
 
-          <div className="p-4 space-y-4">
+          <div className="p-4 md:p-6 space-y-4 overflow-y-auto max-h-[calc(85vh-200px)]">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h4 className="text-sm font-medium text-muted-foreground">Date & Time</h4>

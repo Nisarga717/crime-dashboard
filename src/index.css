@@ -53,23 +53,121 @@
 
   body {
     @apply bg-background text-foreground;
+    @apply antialiased;
+    @apply scroll-smooth;
+  }
+
+  /* Smooth scrolling for better UX */
+  html {
+    @apply scroll-smooth;
   }
 }
 
+/* Z-index hierarchy to prevent overlaps */
+/* Base: 0-10, Components: 20-30, Overlays: 40-50, Modals: 60-70, Tooltips: 80-90 */
+
+/* Leaflet map styles */
 .leaflet-container {
   height: 100%;
   width: 100%;
   border-radius: 0.5rem;
+  z-index: 1;
+  position: relative;
 }
 
 .leaflet-control-attribution {
   @apply text-xs text-black;
+  z-index: 10;
 }
 
+.leaflet-popup {
+  z-index: 1000;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1000;
+}
+
+/* Map container with proper layering */
 .crime-map-container {
   @apply relative h-full w-full overflow-hidden rounded-lg border border-border;
+  @apply transition-all duration-300;
+  z-index: 1;
+  isolation: isolate;
 }
 
 .map-overlay {
-  @apply absolute top-4 right-4 z-10 p-2 bg-card/80 backdrop-blur-sm rounded-md border border-border;
+  @apply absolute bottom-4 left-4 z-[1001] p-3 bg-background/95 backdrop-blur-md rounded-lg border border-border shadow-lg;
+  @apply transition-all duration-300;
+  max-width: calc(100% - 2rem);
+}
+
+/* Smooth transitions for all interactive elements */
+@layer utilities {
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .transition-fast {
+    @apply transition-all duration-150 ease-in-out;
+  }
+
+  .transition-slow {
+    @apply transition-all duration-500 ease-in-out;
+  }
+}
+
+/* Prevent content overflow */
+.overflow-container {
+  @apply overflow-x-hidden overflow-y-auto;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted)) transparent;
+}
+
+.overflow-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.overflow-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-container::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full;
+}
+
+.overflow-container::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Loading animation */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
 }

@@ -162,11 +162,11 @@ const CrimeMap: React.FC<CrimeMapProps> = ({ reports, onReportSelect }) => {
         </MarkerClusterGroup>
       </MapContainer>
       
-      <div className="map-overlay absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm p-2 rounded-md shadow-md flex flex-wrap gap-2">
+      <div className="map-overlay flex flex-wrap gap-3 items-center">
         {Object.keys(crimeIcons).map(category => (
-          <div key={category} className="flex items-center">
+          <div key={category} className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-background/50 hover:bg-background/70 transition-fast">
             <div 
-              className="w-3 h-3 rounded-full mr-1"
+              className="w-3 h-3 rounded-full flex-shrink-0"
               style={{
                 backgroundColor: 
                   category === 'violent' ? '#e53e3e' : 
@@ -176,7 +176,7 @@ const CrimeMap: React.FC<CrimeMapProps> = ({ reports, onReportSelect }) => {
                   '#718096'
               }}
             />
-            <span className="text-xs capitalize">{category}</span>
+            <span className="text-xs capitalize font-medium whitespace-nowrap">{category}</span>
           </div>
         ))}
       </div>

@@ -125,26 +125,28 @@ const DashboardContent: React.FC = () => {
     : '0.0';
 
   return (
-    <div className="min-h-screen flex flex-col w-full">
-      <header className="flex items-center p-4 border-b bg-background">
+    <div className="min-h-screen flex flex-col w-full relative">
+      <header className="sticky top-0 z-40 flex items-center p-4 border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
         <h1 className="text-xl font-semibold">Crime Watch Command Center</h1>
         <div className="ml-auto flex items-center gap-2">
           {/* Placeholder for user menu, notifications, etc. */}
         </div>
       </header>
       
-      <main className="flex-1 overflow-auto p-4">
+      <main className="flex-1 overflow-container p-4 md:p-6">
         {loading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="animate-pulse-soft">Loading dashboard data...</div>
+          <div className="flex items-center justify-center h-[calc(100vh-8rem)]">
+            <div className="animate-pulse-soft text-lg">Loading dashboard data...</div>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fade-in max-w-[1920px] mx-auto">
             {/* Global Filters */}
-            <GlobalFilters incidentTypes={incidentTypes} statuses={statuses} />
+            <div className="sticky top-[73px] z-30 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 -mx-4 md:-mx-6 px-4 md:px-6 pt-4 pb-2 border-b">
+              <GlobalFilters incidentTypes={incidentTypes} statuses={statuses} />
+            </div>
             
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               <KpiCard 
                 title="Today's Reports" 
                 value={todayCount}
@@ -163,13 +165,13 @@ const DashboardContent: React.FC = () => {
             {/* Status KPI Cards */}
             <StatusKpiCards reports={filteredReports} />
 
-            {/* Temporal Visualization - Now Larger and Centered */}
-            <div className="w-full h-[500px]">
+            {/* Temporal Visualization */}
+            <div className="w-full h-[500px] transition-smooth">
               <CrimeTrendChart reports={filteredReports} className="h-full" />
             </div>
 
             {/* Map Section */}
-            <div className="w-full h-[500px]">
+            <div className="w-full h-[500px] transition-smooth">
               <CrimeMap 
                 reports={filteredReports} 
                 onReportSelect={handleReportSelect} 
@@ -178,12 +180,16 @@ const DashboardContent: React.FC = () => {
             
             {/* Charts Section - Two column grid for smaller visualizations */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <TimeOfDayChart reports={filteredReports} className="h-[400px]" />
-              <IncidentTypeChart reports={filteredReports} className="h-[400px]" />
+              <div className="transition-smooth">
+                <TimeOfDayChart reports={filteredReports} className="h-[400px]" />
+              </div>
+              <div className="transition-smooth">
+                <IncidentTypeChart reports={filteredReports} className="h-[400px]" />
+              </div>
             </div>
 
             {/* Reports Table - Full width */}
-            <div className="w-full">
+            <div className="w-full transition-smooth">
               <ReportsTable 
                 reports={filteredReports} 
                 onReportSelect={handleReportSelect} 
