@@ -126,75 +126,108 @@ const DashboardContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col w-full relative">
-      <header className="sticky top-0 z-40 flex items-center p-4 border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
-        <h1 className="text-xl font-semibold">Crime Watch Command Center</h1>
-        <div className="ml-auto flex items-center gap-2">
+      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-4 border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 shadow-sm">
+        <h1 className="text-xl font-semibold tracking-tight">Crime Watch Command Center</h1>
+        <div className="flex items-center gap-2">
           {/* Placeholder for user menu, notifications, etc. */}
         </div>
       </header>
       
-      <main className="flex-1 overflow-container p-4 md:p-6">
+      <main className="flex-1 overflow-container">
         {loading ? (
           <div className="flex items-center justify-center h-[calc(100vh-8rem)]">
             <div className="animate-pulse-soft text-lg">Loading dashboard data...</div>
           </div>
         ) : (
-          <div className="space-y-6 animate-fade-in max-w-[1920px] mx-auto">
+          <div className="space-y-8 animate-fade-in max-w-[1920px] mx-auto px-6 py-6">
             {/* Global Filters */}
-            <div className="sticky top-[73px] z-30 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 -mx-4 md:-mx-6 px-4 md:px-6 pt-4 pb-2 border-b">
+            <div className="sticky top-[65px] z-30 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 -mx-6 px-6 pt-5 pb-4 border-b shadow-sm">
               <GlobalFilters incidentTypes={incidentTypes} statuses={statuses} />
             </div>
             
-            {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-              <KpiCard 
-                title="Today's Reports" 
-                value={todayCount}
-                icon={<Clock className="h-4 w-4" />} 
-              />
-              <KpiCard 
-                title="Last 7 Days" 
-                value={lastWeekCount} 
-                changeType={parseFloat(weeklyChange) > 0 ? 'increase' : parseFloat(weeklyChange) < 0 ? 'decrease' : 'neutral'}
-                changeValue={`${Math.abs(parseFloat(weeklyChange))}%`}
-                description="vs previous week"
-                icon={<BarChart2 className="h-4 w-4" />} 
-              />
-            </div>
+            {/* KPI Cards Section - Properly aligned with consistent spacing */}
+            <section className="space-y-6">
+              {/* Primary KPI Cards */}
+              <div>
+                <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Overview</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                  <KpiCard 
+                    title="Today's Reports" 
+                    value={todayCount}
+                    icon={<Clock className="h-4 w-4" />} 
+                  />
+                  <KpiCard 
+                    title="Last 7 Days" 
+                    value={lastWeekCount} 
+                    changeType={parseFloat(weeklyChange) > 0 ? 'increase' : parseFloat(weeklyChange) < 0 ? 'decrease' : 'neutral'}
+                    changeValue={`${Math.abs(parseFloat(weeklyChange))}%`}
+                    description="vs previous week"
+                    icon={<BarChart2 className="h-4 w-4" />} 
+                  />
+                  <KpiCard 
+                    title="Last 30 Days" 
+                    value={lastMonthCount}
+                    description="total reports"
+                    icon={<BarChart2 className="h-4 w-4" />} 
+                  />
+                  <KpiCard 
+                    title="Most Common" 
+                    value={mostFrequentType || "N/A"}
+                    description="incident type"
+                    icon={<BarChart2 className="h-4 w-4" />} 
+                  />
+                </div>
+              </div>
 
-            {/* Status KPI Cards */}
-            <StatusKpiCards reports={filteredReports} />
+              {/* Status KPI Cards */}
+              <div>
+                <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Status Breakdown</h2>
+                <StatusKpiCards reports={filteredReports} />
+              </div>
+            </section>
 
             {/* Temporal Visualization */}
-            <div className="w-full h-[500px] transition-smooth">
-              <CrimeTrendChart reports={filteredReports} className="h-full" />
-            </div>
+            <section>
+              <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Crime Trends</h2>
+              <div className="w-full h-[500px] transition-smooth">
+                <CrimeTrendChart reports={filteredReports} className="h-full" />
+              </div>
+            </section>
 
             {/* Map Section */}
-            <div className="w-full h-[500px] transition-smooth">
-              <CrimeMap 
-                reports={filteredReports} 
-                onReportSelect={handleReportSelect} 
-              />
-            </div>
+            <section>
+              <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Geographic Distribution</h2>
+              <div className="w-full h-[500px] transition-smooth">
+                <CrimeMap 
+                  reports={filteredReports} 
+                  onReportSelect={handleReportSelect} 
+                />
+              </div>
+            </section>
             
             {/* Charts Section - Two column grid for smaller visualizations */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="transition-smooth">
-                <TimeOfDayChart reports={filteredReports} className="h-[400px]" />
+            <section>
+              <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Analytics</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="transition-smooth">
+                  <TimeOfDayChart reports={filteredReports} className="h-[400px]" />
+                </div>
+                <div className="transition-smooth">
+                  <IncidentTypeChart reports={filteredReports} className="h-[400px]" />
+                </div>
               </div>
-              <div className="transition-smooth">
-                <IncidentTypeChart reports={filteredReports} className="h-[400px]" />
-              </div>
-            </div>
+            </section>
 
             {/* Reports Table - Full width */}
-            <div className="w-full transition-smooth">
-              <ReportsTable 
-                reports={filteredReports} 
-                onReportSelect={handleReportSelect} 
-              />
-            </div>
+            <section>
+              <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">All Reports</h2>
+              <div className="w-full transition-smooth">
+                <ReportsTable 
+                  reports={filteredReports} 
+                  onReportSelect={handleReportSelect} 
+                />
+              </div>
+            </section>
           </div>
         )}
       </main>

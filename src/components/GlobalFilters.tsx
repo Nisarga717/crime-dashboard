@@ -59,15 +59,15 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ incidentTypes, statuses }
   };
 
   return (
-    <Card>
-      <CardHeader className="py-3">
-        <CardTitle className="text-lg flex items-center">
-          <Filter className="h-4 w-4 mr-2" />
-          Dashboard Filters
+    <Card className="border-0 shadow-none bg-transparent">
+      <CardHeader className="px-0 pt-0 pb-3">
+        <CardTitle className="text-base font-medium flex items-center text-foreground">
+          <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
+          Filters
         </CardTitle>
       </CardHeader>
-      <CardContent className="py-3">
-        <div className="flex flex-wrap gap-2 items-center">
+      <CardContent className="px-0 pb-0">
+        <div className="flex flex-wrap gap-3 items-center">
           {/* Date Range Filter */}
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
@@ -170,13 +170,15 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ incidentTypes, statuses }
           </Popover>
 
           {/* Apply and Reset buttons */}
-          <Button onClick={handleApplyFilters} className="ml-auto">
-            Apply Filters
-          </Button>
-          <Button variant="outline" onClick={handleResetFilters}>
-            <X className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
+          <div className="flex gap-2 ml-auto">
+            <Button onClick={handleApplyFilters} size="sm">
+              Apply
+            </Button>
+            <Button variant="outline" onClick={handleResetFilters} size="sm">
+              <X className="h-4 w-4 mr-1.5" />
+              Reset
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

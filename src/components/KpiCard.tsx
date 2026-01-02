@@ -24,36 +24,32 @@ const KpiCard: React.FC<KpiCardProps> = ({
   className,
 }) => {
   return (
-    <Card className={cn("overflow-hidden", className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {icon && <div className="text-muted-foreground">{icon}</div>}
+    <Card className={cn("overflow-hidden transition-smooth hover:shadow-md", className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 pt-4 px-4">
+        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        {icon && <div className="text-muted-foreground opacity-70">{icon}</div>}
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+      <CardContent className="px-4 pb-4">
+        <div className="text-3xl font-bold mb-1">{value}</div>
         {(changeType || description) && (
-          <div className="flex items-center text-xs text-muted-foreground">
-            {changeType && (
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+            {changeType && changeValue && (
               <>
                 <div className={cn(
-                  "mr-1",
+                  "flex items-center",
                   changeType === 'increase' && "text-green-500",
-                  changeType === 'decrease' && "text-red-500"
+                  changeType === 'decrease' && "text-red-500",
+                  changeType === 'neutral' && "text-muted-foreground"
                 )}>
-                  {changeType === 'increase' && <ArrowUp className="h-3 w-3" />}
-                  {changeType === 'decrease' && <ArrowDown className="h-3 w-3" />}
-                  {changeType === 'neutral' && <Minus className="h-3 w-3" />}
+                  {changeType === 'increase' && <ArrowUp className="h-3 w-3 mr-0.5" />}
+                  {changeType === 'decrease' && <ArrowDown className="h-3 w-3 mr-0.5" />}
+                  {changeType === 'neutral' && <Minus className="h-3 w-3 mr-0.5" />}
+                  <span className="font-medium">{changeValue}</span>
                 </div>
-                <span className={cn(
-                  changeType === 'increase' && "text-green-500",
-                  changeType === 'decrease' && "text-red-500"
-                )}>
-                  {changeValue}
-                </span>
-                <span className="mx-1">•</span>
+                {description && <span className="text-muted-foreground/70">•</span>}
               </>
             )}
-            <span>{description}</span>
+            {description && <span className="text-muted-foreground/70">{description}</span>}
           </div>
         )}
       </CardContent>
