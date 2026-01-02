@@ -64,7 +64,8 @@ const MapView = ({ center }: { center: [number, number] }) => {
   const map = useMap();
   
   useEffect(() => {
-    map.setView(center, 13);
+    // Zoom level 14 provides good detail for university area
+    map.setView(center, 14);
   }, [center, map]);
   
   return null;
@@ -84,8 +85,8 @@ const Marker = (props: any) => {
 };
 
 const CrimeMap: React.FC<CrimeMapProps> = ({ reports, onReportSelect }) => {
-  // Default center at Surat, Gujarat, India
-  const [center, setCenter] = useState<[number, number]>([21.1702, 72.8311]);
+  // Default center at Marwadi University, Rajkot, Gujarat, India
+  const [center, setCenter] = useState<[number, number]>([22.3039, 70.8022]);
   const [selectedReport, setSelectedReport] = useState<CrimeReport | null>(null);
 
   useEffect(() => {

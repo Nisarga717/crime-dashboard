@@ -35,7 +35,7 @@ export interface User {
   language: string;
 }
 
-// Generate mock data for development - centered in Surat, Gujarat, India
+// Generate mock data for development - centered near Marwadi University, Rajkot, Gujarat, India
 export const generateMockData = (): CrimeReport[] => {
   // Define common incident types for India
   const incidentTypes = [
@@ -69,10 +69,10 @@ export const generateMockData = (): CrimeReport[] => {
     "Critical"
   ];
 
-  // Define Surat city center coordinates
-  // Surat, Gujarat, India approximate coordinates
-  const centerLat = 21.1702;
-  const centerLng = 72.8311;
+  // Define Marwadi University coordinates (Rajkot, Gujarat, India)
+  // Marwadi University is located at approximately 22.3039° N, 70.8022° E
+  const centerLat = 22.3039;
+  const centerLng = 70.8022;
   
   // Generate 100 random crime reports
   return Array.from({ length: 100 }, (_, i) => {
@@ -84,7 +84,7 @@ export const generateMockData = (): CrimeReport[] => {
     const hours = Math.floor(Math.random() * 24);
     const minutes = Math.floor(Math.random() * 60);
     
-    // Random location within ~3km of Surat city center
+    // Random location within ~3km of Marwadi University area
     const lat = centerLat + (Math.random() - 0.5) * 0.05;
     const lng = centerLng + (Math.random() - 0.5) * 0.05;
     
@@ -96,18 +96,22 @@ export const generateMockData = (): CrimeReport[] => {
     const randomLastName = indianLastNames[Math.floor(Math.random() * indianLastNames.length)];
     const perpetrator = Math.random() > 0.6 ? "Unknown" : `${randomFirstName} ${randomLastName}`;
     
-    // Generate more realistic incident details
+    // Generate more realistic incident details for university area
     const incidentDetails = [
-      "Victim reported their mobile phone was snatched by two individuals on a motorcycle.",
-      "Store owner reported break-in and theft of cash and electronics.",
-      "Complainant reported harassment while walking home from work.",
-      "Vehicle parked outside residence was damaged overnight.",
-      "Resident reported suspicious activity in the neighborhood.",
-      "Personal belongings stolen from apartment.",
-      "Victim reported being followed by unknown individuals.",
-      "Shop owner reported counterfeit currency used for purchase.",
-      "Verbal altercation escalated to physical assault.",
-      "Complainant reported online fraud and money loss."
+      "Student reported their mobile phone was snatched near university campus by two individuals on a motorcycle.",
+      "Shop owner near Marwadi University reported break-in and theft of cash and electronics.",
+      "Complainant reported harassment while walking near university area after classes.",
+      "Vehicle parked near university campus was damaged overnight.",
+      "Resident near Marwadi University reported suspicious activity in the neighborhood.",
+      "Student reported personal belongings stolen from hostel/near campus area.",
+      "Victim reported being followed by unknown individuals near university road.",
+      "Shop owner near campus reported counterfeit currency used for purchase.",
+      "Verbal altercation near university area escalated to physical assault.",
+      "Student reported online fraud and money loss related to university transactions.",
+      "Bicycle theft reported from university parking area.",
+      "Harassment reported near university bus stop during evening hours.",
+      "Property damage reported at shop near Marwadi University entrance.",
+      "Traffic violation reported on university road during peak hours."
     ];
     
     const chosenIncidentType = incidentTypes[Math.floor(Math.random() * incidentTypes.length)];
@@ -134,14 +138,14 @@ export const generateMockData = (): CrimeReport[] => {
   });
 };
 
-// Generate mock user data for Surat, Gujarat
+// Generate mock user data for Rajkot, Gujarat (near Marwadi University)
 export const generateMockUsers = (): User[] => {
   // Common Indian names
   const firstNames = ["Raj", "Amit", "Rahul", "Priya", "Neha", "Anjali", "Vikram", "Sanjay", "Kavita", "Deepika"];
   const lastNames = ["Sharma", "Patel", "Shah", "Singh", "Kumar", "Verma", "Desai", "Mehta", "Joshi", "Gandhi"];
   
-  // Areas in Surat
-  const areas = ["Adajan", "City Light", "Vesu", "Althan", "Athwa", "Dumas", "Katargam", "Varachha", "Udhna", "Piplod"];
+  // Areas near Marwadi University, Rajkot
+  const areas = ["Gauridham", "University Road", "Kalavad Road", "150 Feet Ring Road", "Yagnik Road", "Amin Marg", "Jawahar Road", "Dhebar Road", "Gondal Road", "Kalawad Road"];
   
   // Languages common in Gujarat
   const languages = ["Gujarati", "Hindi", "English"];
@@ -161,10 +165,10 @@ export const generateMockUsers = (): User[] => {
       created_at: created.toISOString(),
       first_name: firstName,
       last_name: lastName,
-      address: `${Math.floor(Math.random() * 999) + 1}, ${area} Road, Surat`,
-      pincode: 395007,
+      address: `${Math.floor(Math.random() * 999) + 1}, ${area}, Rajkot`,
+      pincode: 360003,
       state: "Gujarat",
-      city: "Surat",
+      city: "Rajkot",
       email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 999) + 1}@example.com`,
       phone_number: `+91 ${Math.floor(Math.random() * 9000000000) + 1000000000}`,
       points: Math.floor(Math.random() * 500),
@@ -200,7 +204,7 @@ export const fetchCrimeReports = async (): Promise<CrimeReport[]> => {
     // Transform Supabase data to match CrimeReport interface
     return data.map((report: any) => {
       // Extract coordinates from PostGIS geography
-      let coordinates: [number, number] = [72.8311, 21.1702]; // Default to Surat center
+      let coordinates: [number, number] = [70.8022, 22.3039]; // Default to Marwadi University, Rajkot
       
       if (report.location) {
         // If location is a PostGIS geography, we need to extract coordinates
@@ -277,9 +281,9 @@ export const fetchUsers = async (): Promise<User[]> => {
       first_name: user.first_name || "",
       last_name: user.last_name || "",
       address: user.address || "",
-      pincode: user.pincode || 395007,
+      pincode: user.pincode || 360003,
       state: user.state || "Gujarat",
-      city: user.city || "Surat",
+      city: user.city || "Rajkot",
       email: user.email || "",
       phone_number: user.phone_number || "",
       points: user.points || 0,

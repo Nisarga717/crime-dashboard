@@ -169,7 +169,8 @@ const ReportDetail: React.FC<ReportDetailProps> = ({
             <div>
               <h4 className="text-sm font-medium text-muted-foreground">Location</h4>
               <p>Coordinates: {report.location.coordinates[1].toFixed(6)}, {report.location.coordinates[0].toFixed(6)}</p>
-              <p>Surat, Gujarat - 395007</p>
+              <p>Rajkot, Gujarat - 360003</p>
+              <p className="text-xs text-muted-foreground mt-1">Near Marwadi University</p>
             </div>
 
             <Separator />
